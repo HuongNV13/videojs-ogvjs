@@ -27,6 +27,8 @@ This is the simplest case. Get the script in whatever way you prefer and include
 
 ```html
 <script src="//path/to/video.min.js"></script>
+<script src="/path/to/ogv-support.js"></script>
+<script src="/path/to/dist/ogv.js"></script>
 <script src="//path/to/videojs-ogvjs.min.js"></script>
 <script>
   var player = videojs('my-video', {
