@@ -11,15 +11,13 @@
   "scripts": {
     "build": "npm-run-all -s clean -p build:*",
     "build-prod": "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
-    "build:test": "babel-node scripts/build-test.js",
+    "build-test": "cross-env-shell TEST_BUNDLE_ONLY=1 'npm run build'",
     "build:js": "rollup -c scripts/rollup.config.js",
     "clean": "shx rm -rf ./dist ./test/dist ./cjs ./es && shx mkdir -p ./dist ./test/dist ./cjs ./es",
     "lint": "vjsstandard",
     "server": "karma start scripts/karma.conf.js --singleRun=false --auto-watch",
     "start": "npm-run-all -p server watch",
-    "pretest": "npm-run-all lint build",
-    "test": "karma start scripts/karma.conf.js",
-    "posttest": "shx cat test/dist/coverage/text.txt",
+    "test": "npm-run-all lint build-test",
     "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
     "preversion": "npm test",
     "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
@@ -37,20 +35,6 @@
   ],
   "author": "Huong Nguyen <huongnv13@gmail.com>",
   "license": "MIT",
-  "browserify": {
-    "transform": [
-      "browserify-shim",
-      "browserify-versionify"
-    ]
-  },
-  "browserify-shim": {
-    "qunit": "global:QUnit",
-    "sinon": "global:sinon",
-    "video.js": "global:videojs",
-    "OGVLoader": "global:OGVLoader",
-    "OGVPlayer": "global:OGVPlayer",
-    "OGVCompat": "global:OGVCompat"
-  },
   "vjsstandard": {
     "ignore": [
       "es",
@@ -92,10 +76,6 @@
     "@babel/preset-env": "^7.15.0",
     "@babel/runtime": "^7.14.0",
     "@videojs/generator-helpers": "~2.0.2",
-    "babelify": "^10.0.0",
-    "browserify": "^17.0.0",
-    "browserify-shim": "^3.8.14",
-    "browserify-versionify": "^1.0.6",
     "glob": "^7.1.7",
     "global": "^4.4.0",
     "karma": "^6.3.2",
