@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videojs-ogvjs Demo</title>
+  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+
+</head>
+<body>
+  <video id="videojs-ogvjs-player" class="video-js vjs-default-skin" controls>
+    <source src="https://upload.wikimedia.org/wikipedia/commons/9/96/Curiosity%27s_Seven_Minutes_of_Terror.ogv" type='video/ogg; codecs=&quot;theora, vorbis&quot;'>
+  </video>
+  <ul>
+    <li><a href="/test/debug.html">Run unit tests in browser.</a></li>
+
+  </ul>
+  <script src="node_modules/video.js/dist/video.js"></script>
+  <script src="/node_modules/ogv/dist/ogv-support.js"></script>
+  <script src="/node_modules/ogv/dist/ogv.js"></script>
+  <script src="dist/videojs-ogvjs.js"></script>
+  <script>
+    (function(window, videojs) {
+      var examplePlayer = window.examplePlayer = videojs('videojs-ogvjs-player', {
+        techOrder: ['OgvJS'],
+        ogvjs: {
+          base: '/node_modules/ogv/dist'
+        }
+      });
+    }(window, window.videojs));
+  </script>
+</body>
+</html>
