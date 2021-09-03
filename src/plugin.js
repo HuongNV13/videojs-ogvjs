@@ -4,6 +4,11 @@ import OGVLoader from 'OGVLoader';
 import OGVPlayer from 'OGVPlayer';
 const Tech = videojs.getComponent('Tech');
 
+const androidOS = 'Android';
+const iPhoneOS = 'iPhoneOS';
+const iPadOS = 'iPadOS';
+const otherOS = 'Other';
+
 /**
  * Object.defineProperty but "lazy", which means that the value is only set after
  * it retrieved the first time, rather than being set right away.
@@ -38,6 +43,25 @@ const defineLazyProperty = function(obj, key, getValue, setter = true) {
 };
 
 /**
+ * Get the device's OS.
+ *
+ * @return {string} Device's OS.
+ */
+const getDeviceOS = function() {
+  /* global navigator */
+  const ua = navigator.userAgent;
+
+  if (/android/i.test(ua)) {
+    return androidOS;
+  } else if (/iPad|iPhone|iPod/.test(ua)) {
+    return iPhoneOS;
+  } else if ((navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+    return iPadOS;
+  }
+  return otherOS;
+};
+
+/**
  * OgvJS Media Controller - Wrapper for ogv.js Media API
  *
  * @mixes Tech~SourceHandlerAdditions
@@ -61,6 +85,13 @@ class OgvJS extends Tech {
     OgvJS.setIfAvailable(this.el_, 'preload', options.preload);
 
     this.on('loadedmetadata', function() {
+      if (getDeviceOS() === iPhoneOS) {
+        // iPhoneOS add some inline styles to the canvas, we need to remove it.
+        const canvas = this.el_.getElementsByTagName('canvas')[0];
+
+        canvas.style.removeProperty('width');
+        canvas.style.removeProperty('margin');
+      }
       this.triggerReady();
     });
   }
@@ -213,7 +244,7 @@ class OgvJS extends Tech {
    * @method setVolume
    */
   setVolume(percentAsDecimal) {
-    if (this.el_.hasOwnProperty('volume')) {
+    if (getDeviceOS() !== iPhoneOS && this.el_.hasOwnProperty('volume')) {
       this.el_.volume = percentAsDecimal;
     }
   }
@@ -596,6 +627,9 @@ OgvJS.canPlaySource = function(srcObj) {
  * @return {boolean} True if volume can be controlled.
  */
 OgvJS.canControlVolume = function() {
+  if (getDeviceOS() === iPhoneOS) {
+    return false;
+  }
   const p = new OGVPlayer();
 
   return p.hasOwnProperty('volume');
