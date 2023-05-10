@@ -1,6 +1,6 @@
 {
   "name": "videojs-ogvjs",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Ogv.jv Tech plugin for Video.JS",
   "main": "dist/videojs-ogvjs.cjs.js",
   "module": "dist/videojs-ogvjs.es.js",
@@ -68,8 +68,8 @@
     "README.md": "doctoc --notitle"
   },
   "dependencies": {
-    "ogv": "^1.8.4",
-    "video.js": "^6 || ^7"
+    "ogv": "^1.8.9",
+    "video.js": "^7.17.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",

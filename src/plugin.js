@@ -2,6 +2,7 @@ import videojs from 'video.js';
 import OGVCompat from 'OGVCompat';
 import OGVLoader from 'OGVLoader';
 import OGVPlayer from 'OGVPlayer';
+
 const Tech = videojs.getComponent('Tech');
 
 const androidOS = 'Android';
@@ -18,8 +19,8 @@ const otherOS = 'Other';
  * @param {Function} getValue the function used to get the value when it is needed.
  * @param {boolean} setter whether a setter should be allowed or not.
  */
-const defineLazyProperty = function(obj, key, getValue, setter = true) {
-  const set = function(value) {
+const defineLazyProperty = (obj, key, getValue, setter = true) => {
+  const set = (value) => {
     Object.defineProperty(obj, key, {value, enumerable: true, writable: true});
   };
 
@@ -30,7 +31,6 @@ const defineLazyProperty = function(obj, key, getValue, setter = true) {
       const value = getValue();
 
       set(value);
-
       return value;
     }
   };
@@ -47,7 +47,7 @@ const defineLazyProperty = function(obj, key, getValue, setter = true) {
  *
  * @return {string} Device's OS.
  */
-const getDeviceOS = function() {
+const getDeviceOS = () => {
   /* global navigator */
   const ua = navigator.userAgent;
 
@@ -70,11 +70,11 @@ const getDeviceOS = function() {
 class OgvJS extends Tech {
 
   /**
-   * Create an instance of this Tech.
-   *
-   * @param {Object} [options] The key/value store of player options.
-   * @param {Component~ReadyCallback} ready Callback function to call when the `OgvJS` Tech is ready.
-   */
+     * Create an instance of this Tech.
+     *
+     * @param {Object} [options] The key/value store of player options.
+     * @param {Component~ReadyCallback} ready Callback function to call when the `OgvJS` Tech is ready.
+     */
   constructor(options, ready) {
     super(options, ready);
 
@@ -84,7 +84,7 @@ class OgvJS extends Tech {
     OgvJS.setIfAvailable(this.el_, 'poster', options.poster);
     OgvJS.setIfAvailable(this.el_, 'preload', options.preload);
 
-    this.on('loadedmetadata', function() {
+    this.on('loadedmetadata', () => {
       if (getDeviceOS() === iPhoneOS) {
         // iPhoneOS add some inline styles to the canvas, we need to remove it.
         const canvas = this.el_.getElementsByTagName('canvas')[0];
@@ -92,15 +92,16 @@ class OgvJS extends Tech {
         canvas.style.removeProperty('width');
         canvas.style.removeProperty('margin');
       }
-      this.triggerReady();
     });
+
+    this.triggerReady();
   }
 
   /**
-   * Create the 'OgvJS' Tech's DOM element.
-   *
-   * @return {Element} The element that gets created.
-   */
+     * Create the 'OgvJS' Tech's DOM element.
+     *
+     * @return {Element} The element that gets created.
+     */
   createEl() {
     const options = this.options_;
 
@@ -119,30 +120,30 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Start playback
-   *
-   * @method play
-   */
+     * Start playback
+     *
+     * @method play
+     */
   play() {
     this.el_.play();
   }
 
   /**
-   * Get the current playback speed.
-   *
-   * @return {number}
-   * @method playbackRate
-   */
+     * Get the current playback speed.
+     *
+     * @return {number}
+     * @method playbackRate
+     */
   playbackRate() {
     return this.el_.playbackRate || 1;
   }
 
   /**
-   * Set the playback speed.
-   *
-   * @param {number} val Speed for the player to play.
-   * @method setPlaybackRate
-   */
+     * Set the playback speed.
+     *
+     * @param {number} val Speed for the player to play.
+     * @method setPlaybackRate
+     */
   setPlaybackRate(val) {
     if (this.el_.hasOwnProperty('playbackRate')) {
       this.el_.playbackRate = val;
@@ -150,49 +151,49 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Returns a TimeRanges object that represents the ranges of the media resource that the user agent has played.
-   *
-   * @return {TimeRangeObject} the range of points on the media timeline that has been reached through normal playback
-   */
+     * Returns a TimeRanges object that represents the ranges of the media resource that the user agent has played.
+     *
+     * @return {TimeRangeObject} the range of points on the media timeline that has been reached through normal playback
+     */
   played() {
     return this.el_.played;
   }
 
   /**
-   * Pause playback
-   *
-   * @method pause
-   */
+     * Pause playback
+     *
+     * @method pause
+     */
   pause() {
     this.el_.pause();
   }
 
   /**
-   * Is the player paused or not.
-   *
-   * @return {boolean}
-   * @method paused
-   */
+     * Is the player paused or not.
+     *
+     * @return {boolean}
+     * @method paused
+     */
   paused() {
     return this.el_.paused;
   }
 
   /**
-   * Get current playing time.
-   *
-   * @return {number}
-   * @method currentTime
-   */
+     * Get current playing time.
+     *
+     * @return {number}
+     * @method currentTime
+     */
   currentTime() {
     return this.el_.currentTime;
   }
 
   /**
-   * Set current playing time.
-   *
-   * @param {number} seconds Current time of audio/video.
-   * @method setCurrentTime
-   */
+     * Set current playing time.
+     *
+     * @param {number} seconds Current time of audio/video.
+     * @method setCurrentTime
+     */
   setCurrentTime(seconds) {
     try {
       this.el_.currentTime = seconds;
@@ -202,11 +203,11 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Get media's duration.
-   *
-   * @return {number}
-   * @method duration
-   */
+     * Get media's duration.
+     *
+     * @return {number}
+     * @method duration
+     */
   duration() {
     if (this.el_.duration && this.el_.duration !== Infinity) {
       return this.el_.duration;
@@ -216,33 +217,33 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Get a TimeRange object that represents the intersection
-   * of the time ranges for which the user agent has all
-   * relevant media.
-   *
-   * @return {TimeRangeObject}
-   * @method buffered
-   */
+     * Get a TimeRange object that represents the intersection
+     * of the time ranges for which the user agent has all
+     * relevant media.
+     *
+     * @return {TimeRangeObject}
+     * @method buffered
+     */
   buffered() {
     return this.el_.buffered;
   }
 
   /**
-   * Get current volume level.
-   *
-   * @return {number}
-   * @method volume
-   */
+     * Get current volume level.
+     *
+     * @return {number}
+     * @method volume
+     */
   volume() {
     return this.el_.hasOwnProperty('volume') ? this.el_.volume : 1;
   }
 
   /**
-   * Set current playing volume level.
-   *
-   * @param {number} percentAsDecimal Volume percent as a decimal.
-   * @method setVolume
-   */
+     * Set current playing volume level.
+     *
+     * @param {number} percentAsDecimal Volume percent as a decimal.
+     * @method setVolume
+     */
   setVolume(percentAsDecimal) {
     if (getDeviceOS() !== iPhoneOS && this.el_.hasOwnProperty('volume')) {
       this.el_.volume = percentAsDecimal;
@@ -250,81 +251,81 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Is the player muted or not.
-   *
-   * @return {boolean}
-   * @method muted
-   */
+     * Is the player muted or not.
+     *
+     * @return {boolean}
+     * @method muted
+     */
   muted() {
     return this.el_.muted;
   }
 
   /**
-   * Mute the player.
-   *
-   * @param {boolean} muted True to mute the player.
-   */
+     * Mute the player.
+     *
+     * @param {boolean} muted True to mute the player.
+     */
   setMuted(muted) {
     this.el_.muted = !!muted;
   }
 
   /**
-   * Is the player muted by default or not.
-   *
-   * @return {boolean}
-   * @method defaultMuted
-   */
+     * Is the player muted by default or not.
+     *
+     * @return {boolean}
+     * @method defaultMuted
+     */
   defaultMuted() {
     return this.el_.defaultMuted || false;
   }
 
   /**
-   * Get the player width.
-   *
-   * @return {number}
-   * @method width
-   */
+     * Get the player width.
+     *
+     * @return {number}
+     * @method width
+     */
   width() {
     return this.el_.offsetWidth;
   }
 
   /**
-   * Get the player height.
-   *
-   * @return {number}
-   * @method height
-   */
+     * Get the player height.
+     *
+     * @return {number}
+     * @method height
+     */
   height() {
     return this.el_.offsetHeight;
   }
 
   /**
-   * Get the video width.
-   *
-   * @return {number}
-   * @method videoWidth
-   */
+     * Get the video width.
+     *
+     * @return {number}
+     * @method videoWidth
+     */
   videoWidth() {
     return this.el_.videoWidth;
   }
 
   /**
-   * Get the video height.
-   *
-   * @return {number}
-   * @method videoHeight
-   */
+     * Get the video height.
+     *
+     * @return {number}
+     * @method videoHeight
+     */
   videoHeight() {
     return this.el_.videoHeight;
   }
 
   /**
-   * Get/set media source.
-   *
-   * @param {Object=} src Source object
-   * @return {Object}
-   * @method src
-   */
+     * Get/set media source.
+     *
+     * @param {Object=} src Source object
+     * @return {Object}
+     * @method src
+     */
   src(src) {
     if (typeof src === 'undefined') {
       return this.el_.src;
@@ -333,20 +334,20 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Load the media into the player.
-   *
-   * @method load
-   */
+     * Load the media into the player.
+     *
+     * @method load
+     */
   load() {
     this.el_.load();
   }
 
   /**
-   * Get current media source.
-   *
-   * @return {Object}
-   * @method currentSrc
-   */
+     * Get current media source.
+     *
+     * @return {Object}
+     * @method currentSrc
+     */
   currentSrc() {
     if (this.currentSource_) {
       return this.currentSource_.src;
@@ -355,41 +356,41 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Get media poster URL.
-   *
-   * @return {string}
-   * @method poster
-   */
+     * Get media poster URL.
+     *
+     * @return {string}
+     * @method poster
+     */
   poster() {
     return this.el_.poster;
   }
 
   /**
-   * Set media poster URL.
-   *
-   * @param {string} url the poster image's url.
-   * @method
-   */
+     * Set media poster URL.
+     *
+     * @param {string} url the poster image's url.
+     * @method
+     */
   setPoster(url) {
     this.el_.poster = url;
   }
 
   /**
-   * Is the media preloaded or not.
-   *
-   * @return {string}
-   * @method preload
-   */
+     * Is the media preloaded or not.
+     *
+     * @return {string}
+     * @method preload
+     */
   preload() {
     return this.el_.preload || 'none';
   }
 
   /**
-   * Set the media preload method.
-   *
-   * @param {string} val Value for preload attribute.
-   * @method setPreload
-   */
+     * Set the media preload method.
+     *
+     * @param {string} val Value for preload attribute.
+     * @method setPreload
+     */
   setPreload(val) {
     if (this.el_.hasOwnProperty('preload')) {
       this.el_.preload = val;
@@ -397,21 +398,21 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Is the media auto-played or not.
-   *
-   * @return {boolean}
-   * @method autoplay
-   */
+     * Is the media auto-played or not.
+     *
+     * @return {boolean}
+     * @method autoplay
+     */
   autoplay() {
     return this.el_.autoplay || false;
   }
 
   /**
-   * Set media autoplay method.
-   *
-   * @param {boolean} val Value for autoplay attribute.
-   * @method setAutoplay
-   */
+     * Set media autoplay method.
+     *
+     * @param {boolean} val Value for autoplay attribute.
+     * @method setAutoplay
+     */
   setAutoplay(val) {
     if (this.el_.hasOwnProperty('autoplay')) {
       this.el_.autoplay = !!val;
@@ -419,21 +420,21 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Does the media has controls or not.
-   *
-   * @return {boolean}
-   * @method controls
-   */
+     * Does the media has controls or not.
+     *
+     * @return {boolean}
+     * @method controls
+     */
   controls() {
     return this.el_.controls || false;
   }
 
   /**
-   * Set the media controls method.
-   *
-   * @param {boolean} val Value for controls attribute.
-   * @method setControls
-   */
+     * Set the media controls method.
+     *
+     * @param {boolean} val Value for controls attribute.
+     * @method setControls
+     */
   setControls(val) {
     if (this.el_.hasOwnProperty('controls')) {
       this.el_.controls = !!val;
@@ -441,21 +442,21 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Is the media looped or not.
-   *
-   * @return {boolean}
-   * @method loop
-   */
+     * Is the media looped or not.
+     *
+     * @return {boolean}
+     * @method loop
+     */
   loop() {
     return this.el_.loop || false;
   }
 
   /**
-   * Set the media loop method.
-   *
-   * @param {boolean} val Value for loop attribute.
-   * @method setLoop
-   */
+     * Set the media loop method.
+     *
+     * @param {boolean} val Value for loop attribute.
+     * @method setLoop
+     */
   setLoop(val) {
     if (this.el_.hasOwnProperty('loop')) {
       this.el_.loop = !!val;
@@ -463,82 +464,82 @@ class OgvJS extends Tech {
   }
 
   /**
-   * Get a TimeRanges object that represents the
-   * ranges of the media resource to which it is possible
-   * for the user agent to seek.
-   *
-   * @return {TimeRangeObject}
-   * @method seekable
-   */
+     * Get a TimeRanges object that represents the
+     * ranges of the media resource to which it is possible
+     * for the user agent to seek.
+     *
+     * @return {TimeRangeObject}
+     * @method seekable
+     */
   seekable() {
     return this.el_.seekable;
   }
 
   /**
-   * Is player in the "seeking" state or not.
-   *
-   * @return {boolean}
-   * @method seeking
-   */
+     * Is player in the "seeking" state or not.
+     *
+     * @return {boolean}
+     * @method seeking
+     */
   seeking() {
     return this.el_.seeking;
   }
 
   /**
-   * Is the media ended or not.
-   *
-   * @return {boolean}
-   * @method ended
-   */
+     * Is the media ended or not.
+     *
+     * @return {boolean}
+     * @method ended
+     */
   ended() {
     return this.el_.ended;
   }
 
   /**
-   * Get the current state of network activity
-   * NETWORK_EMPTY (numeric value 0)
-   * NETWORK_IDLE (numeric value 1)
-   * NETWORK_LOADING (numeric value 2)
-   * NETWORK_NO_SOURCE (numeric value 3)
-   *
-   * @return {number}
-   * @method networkState
-   */
+     * Get the current state of network activity
+     * NETWORK_EMPTY (numeric value 0)
+     * NETWORK_IDLE (numeric value 1)
+     * NETWORK_LOADING (numeric value 2)
+     * NETWORK_NO_SOURCE (numeric value 3)
+     *
+     * @return {number}
+     * @method networkState
+     */
   networkState() {
     return this.el_.networkState;
   }
 
   /**
-   * Get the current state of the player.
-   * HAVE_NOTHING (numeric value 0)
-   * HAVE_METADATA (numeric value 1)
-   * HAVE_CURRENT_DATA (numeric value 2)
-   * HAVE_FUTURE_DATA (numeric value 3)
-   * HAVE_ENOUGH_DATA (numeric value 4)
-   *
-   * @return {number}
-   * @method readyState
-   */
+     * Get the current state of the player.
+     * HAVE_NOTHING (numeric value 0)
+     * HAVE_METADATA (numeric value 1)
+     * HAVE_CURRENT_DATA (numeric value 2)
+     * HAVE_FUTURE_DATA (numeric value 3)
+     * HAVE_ENOUGH_DATA (numeric value 4)
+     *
+     * @return {number}
+     * @method readyState
+     */
   readyState() {
     return this.el_.readyState;
   }
 
   /**
-   * Does the player support native fullscreen mode or not. (Mobile devices)
-   *
-   * @return {boolean}
-   */
+     * Does the player support native fullscreen mode or not. (Mobile devices)
+     *
+     * @return {boolean}
+     */
   supportsFullScreen() {
     // iOS devices have some problem with HTML5 fullscreen api so we need to fallback to fullWindow mode.
     return false;
   }
 
   /**
-   * Get media player error.
-   *
-   * @return {string}
-   * @method error
-   */
+     * Get media player error.
+     *
+     * @return {string}
+     * @method error
+     */
   error() {
     return this.el_.error;
   }
@@ -584,7 +585,7 @@ OgvJS.Events = [
  * @param {string} name
  * @param value
  */
-OgvJS.setIfAvailable = function(el, name, value) {
+OgvJS.setIfAvailable = (el, name, value) => {
   if (el.hasOwnProperty(name)) {
     el[name] = value;
   }
@@ -595,7 +596,7 @@ OgvJS.setIfAvailable = function(el, name, value) {
  *
  * @return {boolean}
  */
-OgvJS.isSupported = function() {
+OgvJS.isSupported = () => {
   return OGVCompat.supported('OGVPlayer');
 };
 
@@ -605,7 +606,7 @@ OgvJS.isSupported = function() {
  * @param {string} type The mimetype to check
  * @return {string} 'probably', 'maybe', or '' (empty string)
  */
-OgvJS.canPlayType = function(type) {
+OgvJS.canPlayType = (type) => {
   return (type.indexOf('/ogg') !== -1 || type.indexOf('/webm')) ? 'maybe' : '';
 };
 
@@ -615,7 +616,7 @@ OgvJS.canPlayType = function(type) {
  * @param srcObj The source object
  * @return {string} The options passed to the tech
  */
-OgvJS.canPlaySource = function(srcObj) {
+OgvJS.canPlaySource = (srcObj) => {
   return OgvJS.canPlayType(srcObj.type);
 };
 
@@ -626,7 +627,7 @@ OgvJS.canPlaySource = function(srcObj) {
  *
  * @return {boolean} True if volume can be controlled.
  */
-OgvJS.canControlVolume = function() {
+OgvJS.canControlVolume = () => {
   if (getDeviceOS() === iPhoneOS) {
     return false;
   }
@@ -640,7 +641,7 @@ OgvJS.canControlVolume = function() {
  *
  * @return {boolean} True if volume can be muted.
  */
-OgvJS.canMuteVolume = function() {
+OgvJS.canMuteVolume = () => {
   return true;
 };
 
@@ -649,7 +650,7 @@ OgvJS.canMuteVolume = function() {
  *
  * @return {boolean} True if playback rate can be controlled.
  */
-OgvJS.canControlPlaybackRate = function() {
+OgvJS.canControlPlaybackRate = () => {
   return true;
 };
 
@@ -658,7 +659,7 @@ OgvJS.canControlPlaybackRate = function() {
  *
  * @return {boolean} True if native 'TextTracks' are supported.
  */
-OgvJS.supportsNativeTextTracks = function() {
+OgvJS.supportsNativeTextTracks = () => {
   return false;
 };
 
@@ -667,7 +668,7 @@ OgvJS.supportsNativeTextTracks = function() {
  *
  * @return {boolean} True if the fullscreen resize is supported.
  */
-OgvJS.supportsFullscreenResize = function() {
+OgvJS.supportsFullscreenResize = () => {
   return true;
 };
 
@@ -676,7 +677,7 @@ OgvJS.supportsFullscreenResize = function() {
  *
  * @return {boolean} True if the progress events is supported.
  */
-OgvJS.supportsProgressEvents = function() {
+OgvJS.supportsProgressEvents = () => {
   return true;
 };
 
@@ -685,7 +686,7 @@ OgvJS.supportsProgressEvents = function() {
  *
  * @return {boolean} True if the time update events is supported.
  */
-OgvJS.supportsTimeupdateEvents = function() {
+OgvJS.supportsTimeupdateEvents = () => {
   return true;
 };
 
@@ -742,10 +743,8 @@ OgvJS.supportsTimeupdateEvents = function() {
   ['featuresFullscreenResize', 'supportsFullscreenResize'],
   ['featuresProgressEvents', 'supportsProgressEvents'],
   ['featuresTimeupdateEvents', 'supportsTimeupdateEvents']
-].forEach(function([key, fn]) {
-  defineLazyProperty(OgvJS.prototype, key, function() {
-    OgvJS[fn]();
-  }, true);
+].forEach(([key, fn]) => {
+  defineLazyProperty(OgvJS.prototype, key, () => OgvJS[fn](), true);
 });
 
 Tech.registerTech('OgvJS', OgvJS);
