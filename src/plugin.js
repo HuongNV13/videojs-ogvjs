@@ -245,7 +245,8 @@ class OgvJS extends Tech {
      * @method setVolume
      */
   setVolume(percentAsDecimal) {
-    if (getDeviceOS() !== iPhoneOS && this.el_.hasOwnProperty('volume')) {
+    // Apple does not allow iOS and iPadOS devices to set the volume on UI.
+    if (getDeviceOS() !== iPhoneOS && getDeviceOS() !== iPadOS && this.el_.hasOwnProperty('volume')) {
       this.el_.volume = percentAsDecimal;
     }
   }
@@ -623,12 +624,12 @@ OgvJS.canPlaySource = (srcObj) => {
 /**
  * Check if the volume can be changed in this browser/device.
  * Volume cannot be changed in a lot of mobile devices.
- * Specifically, it can't be changed from 1 on iOS.
+ * Specifically, it can't be changed on iOS and iPadOS.
  *
  * @return {boolean} True if volume can be controlled.
  */
 OgvJS.canControlVolume = () => {
-  if (getDeviceOS() === iPhoneOS) {
+  if (getDeviceOS() === iPhoneOS || getDeviceOS() === iPadOS) {
     return false;
   }
   const p = new OGVPlayer();
