@@ -1,6 +1,6 @@
 {
   "name": "videojs-ogvjs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Ogv.jv Tech plugin for Video.JS",
   "main": "dist/videojs-ogvjs.cjs.js",
   "module": "dist/videojs-ogvjs.es.js",
