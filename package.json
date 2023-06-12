@@ -1,93 +1,50 @@
 {
   "name": "videojs-ogvjs",
-  "version": "0.2.1",
+  "version": "1.0.0",
+  "author": "Huong Nguyen <huongnv13@gmail.com>",
   "description": "Ogv.jv Tech plugin for Video.JS",
-  "main": "dist/videojs-ogvjs.cjs.js",
-  "module": "dist/videojs-ogvjs.es.js",
-  "browser": "dist/videojs-ogvjs.js",
-  "generator-videojs-plugin": {
-    "version": "8.0.0"
-  },
-  "scripts": {
-    "build": "npm-run-all -s clean -p build:*",
-    "build-prod": "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
-    "build-test": "cross-env-shell TEST_BUNDLE_ONLY=1 'npm run build'",
-    "build:js": "rollup -c scripts/rollup.config.js",
-    "build-bannerize": "bannerize dist/videojs-ogvjs.js --banner=bannerize.ejs",
-    "postbuild": "npm-run-all build-bannerize",
-    "clean": "shx rm -rf ./dist ./test/dist ./cjs ./es && shx mkdir -p ./dist ./test/dist ./cjs ./es",
-    "lint": "vjsstandard",
-    "server": "karma start scripts/karma.conf.js --singleRun=false --auto-watch",
-    "start": "npm-run-all -p server watch",
-    "test": "npm-run-all lint build-test",
-    "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
-    "preversion": "npm test",
-    "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
-    "watch": "npm-run-all -p watch:*",
-    "watch:js": "npm run build:js -- -w",
-    "prepublishOnly": "npm-run-all build-prod && vjsverify --verbose"
-  },
-  "engines": {
-    "node": ">=14",
-    "npm": ">=6"
-  },
+  "main": "dist/Videojs-Ogvjs.js",
+  "license": "MIT",
   "keywords": [
     "videojs",
     "videojs-plugin"
   ],
-  "author": "Huong Nguyen <huongnv13@gmail.com>",
-  "license": "MIT",
-  "vjsstandard": {
-    "ignore": [
-      "es",
-      "cjs",
-      "dist",
-      "docs",
-      "scripts/karma.conf.js",
-      "test/dist"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HuongNV13/videojs-ogvjs.git"
   },
-  "files": [
-    "CONTRIBUTING.md",
-    "cjs/",
-    "dist/",
-    "docs/",
-    "es/",
-    "index.html",
-    "scripts/",
-    "src/",
-    "test/"
+  "peerDependencies": {
+    "video.js": "8.x"
+  },
+  "scripts": {
+    "build": "npm-run-all -s clean -p build:*",
+    "build:amd": "rollup -c rollup.config.mjs -f amd src/plugin.js --file dist/Videojs-Ogvjs.amd.js",
+    "build:cjs": "rollup -c rollup.config.mjs -f cjs src/plugin.js --file dist/Videojs-Ogvjs.cjs.js",
+    "build:es": "rollup -c rollup.config.mjs -f es src/plugin.js --file dist/Videojs-Ogvjs.es.js",
+    "build:umd": "rollup -c rollup.config.mjs -f umd --name \"Videojs-Ogvjs\" src/plugin.js --file dist/Videojs-Ogvjs.umd.js",
+    "build-uglify": "uglifyjs dist/Videojs-Ogvjs.es.js -o dist/Videojs-Ogvjs.min.js",
+    "build-bannerize": "bannerize dist/*.js --banner=bannerize.ejs",
+    "postbuild": "npm-run-all -s build-bannerize -s build-uglify",
+    "lint": "jshint .",
+    "validate": "npm ls",
+    "version": "npm run build && git add -f dist",
+    "clean": "shx rm -rf ./dist && shx mkdir -p ./dist"
+  },
+  "pre-commit": [
+    "lint"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": "vjsstandard --fix",
-    "README.md": "doctoc --notitle"
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "bannerize": "^1.1.4",
+    "mkdirp": "^0.5.1",
+    "npm-run-all": "^4.1.5",
+    "precommit-hook": "^3.0.0",
+    "rollup": "^3.24",
+    "shx": "^0.3.4",
+    "uglify-js": "^3.17.4"
   },
   "dependencies": {
     "ogv": "^1.8.9",
-    "video.js": "^7.17.0"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.14.8",
-    "@babel/core": "^7.15.0",
-    "@babel/node": "^7.14.9",
-    "@babel/preset-env": "^7.15.0",
-    "@babel/runtime": "^7.14.0",
-    "@videojs/generator-helpers": "~2.0.2",
-    "bannerize": "^1.1.4",
-    "glob": "^7.1.7",
-    "global": "^4.4.0",
-    "karma": "^6.3.2",
-    "qunit": "^2.16.0",
-    "rollup": "^2.46.0",
-    "sinon": "^9.1.0",
-    "videojs-generate-karma-config": "~8.0.0",
-    "videojs-generate-rollup-config": "~6.2.0",
-    "videojs-generator-verify": "~3.0.3",
-    "videojs-standard": "^8.0.4"
+    "video.js": "8.x"
   }
 }

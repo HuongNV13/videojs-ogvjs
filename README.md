@@ -1,8 +1,4 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-
-- [videojs-ogvjs](#videojs-ogvjs)
+- [VideoJS-Ogvjs](#VideoJS-Ogvjs)
   - [Usage](#usage)
     - [`<script>` Tag](#script-tag)
     - [RequireJS/AMD](#requirejsamd)
@@ -10,7 +6,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# videojs-ogvjs
+# VideoJS-Ogvjs
 
 [Ogv.js](https://github.com/brion/ogv.js/) Tech plugin for [Video.JS](https://www.videojs.com).
 
@@ -26,10 +22,10 @@ To include videojs-ogvjs on your website or web application, use any of the foll
 This is the simplest case. Get the script in whatever way you prefer and include the plugin _after_ you include [video.js][videojs], so that the `videojs` global is available.
 
 ```html
-<script src="//path/to/video.min.js"></script>
+<script src="/path/to/video.min.js"></script>
 <script src="/path/to/ogv-support.js"></script>
-<script src="/path/to/dist/ogv.js"></script>
-<script src="//path/to/videojs-ogvjs.min.js"></script>
+<script src="/path/to/ogv.js"></script>
+<script src="/path/to/VideoJS-Ogvjs.min.js"></script>
 <script>
   var player = videojs('my-video', {
     techOrder: ['OgvJS'],
@@ -45,7 +41,7 @@ This is the simplest case. Get the script in whatever way you prefer and include
 When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
 
 ```js
-require(['video.js', 'videojs-ogvjs'], function(videojs) {
+require(['video.js', 'VideoJS-Ogvjs'], function(videojs) {
   var player = videojs('my-video', {
     techOrder: ['OgvJS'],
     ogvjs: {

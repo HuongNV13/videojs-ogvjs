@@ -27,9 +27,3 @@ node_modules/
 
 # Build-related directories
 dist/
-es/
-cjs/
-docs/api/
-test/dist/
-.eslintcache
-.yo-rc.json
